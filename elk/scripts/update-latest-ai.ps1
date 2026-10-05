@@ -8,7 +8,7 @@
     osint_results_ai_v5.jsonl
 
   Kopieert die naar de lokale ELK Stack outputmap:
-    OSINT-ELKStack/output/latest_osint_ai.jsonl
+    elk/output/latest_osint_ai.jsonl
 
   Logstash hoeft daardoor nooit een hardcoded versienummer te kennen.
 #>
