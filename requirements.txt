@@ -1,0 +1,8 @@
+playwright
+requests
+beautifulsoup4
+python-dateutil
+youtube-transcript-api
+feedparser
+transformers
+torch

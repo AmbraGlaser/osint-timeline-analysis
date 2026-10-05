@@ -1,0 +1,59 @@
+{
+  "index_patterns": [
+    "osint-results"
+  ],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "platform": {
+          "type": "keyword"
+        },
+        "title": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "text": {
+          "type": "text"
+        },
+        "published_at": {
+          "type": "date",
+          "ignore_malformed": true
+        },
+        "source_category": {
+          "type": "keyword"
+        },
+        "ai_label": {
+          "type": "keyword"
+        },
+        "ai_score": {
+          "type": "float"
+        },
+        "ai_detected_locations": {
+          "type": "keyword"
+        },
+        "ai_location_count": {
+          "type": "integer"
+        },
+        "scrape_version": {
+          "type": "keyword"
+        },
+        "ai_output_version": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+# Lokale ELK Stack voor HBO Digital Forensics OSINT-onderzoek.
+# Alle services draaien lokaal via Docker Compose; er wordt geen cloud gebruikt.
+
+services:
+  elasticsearch:
+    # Actuele Elastic image volgens de officiele Elastic Docker-documentatie.
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.4.2
+    container_name: osint-elasticsearch
+    environment:
+      # Single-node is geschikt voor een lokale onderzoeksomgeving.
+      - discovery.type=single-node
+      # Security staat uit zodat lokaal gebruik zonder wachtwoorden/certificaten werkt.
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      # Beperkt JVM-geheugen voor een Windows 11 laptop/desktop.
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      # Elasticsearch API is lokaal bereikbaar op http://localhost:9200.
+      - "9200:9200"
+    volumes:
+      # Persistente opslag voor Elasticsearch-indexdata.
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    healthcheck:
+      # Compose gebruikt dit om te wachten tot Elasticsearch HTTP-verkeer accepteert.
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  kibana:
+    # Kibana gebruikt dezelfde Elastic Stack-versie als Elasticsearch.
+    image: docker.elastic.co/kibana/kibana:9.4.2
+    container_name: osint-kibana
+    environment:
+      # Kibana verbindt binnen het Docker-netwerk met Elasticsearch.
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      # Security staat uit in Elasticsearch, dus Kibana gebruikt geen login-provider.
+      - XPACK_SECURITY_ENABLED=false
+    ports:
+      # Kibana is lokaal bereikbaar op http://localhost:5601.
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  logstash:
+    # Logstash gebruikt dezelfde Elastic Stack-versie als Elasticsearch en Kibana.
+    image: docker.elastic.co/logstash/logstash:9.4.2
+    container_name: osint-logstash
+    environment:
+      # Beperkt JVM-geheugen voor lokale verwerking.
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      # Pipeline-configuratie vanaf de lokale map.
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      # Index-template met vaste veldtypes voor Kibana-analyse.
+      - ./logstash/templates:/usr/share/logstash/templates:ro
+      # OSINT-outputbestanden vanaf de lokale map.
+      - ./data:/usr/share/logstash/input:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+volumes:
+  # Docker-volume voor persistente Elasticsearch-data.
+  elasticsearch-data:

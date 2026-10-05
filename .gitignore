@@ -216,3 +216,22 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# --- Project-specific ignores ---
+
+# Local project configuration
+config.py
+
+# Generated OSINT / analysis data
+output/
+data/
+*.jsonl
+
+# Local IDE settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
