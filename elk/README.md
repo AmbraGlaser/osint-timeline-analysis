@@ -11,7 +11,7 @@ Kibana laat je de gegevens analyseren op tijd, locatie, AI-label, broncategorie 
 ## Mappenstructuur
 
 ```text
-OSINT-ELKStack/
+elk/
 |-- docker-compose.yml
 |-- README.md
 |-- data/
@@ -40,7 +40,7 @@ OSINT-ELKStack/
 Open PowerShell:
 
 ```powershell
-cd "K:\HSLeiden Onderzoeksomgevingen\OSINT\OSINT-ELKStack"
+cd osint-timeline-analysis/elk
 ```
 
 Maak of update eerst het latest-bestand:
@@ -92,7 +92,7 @@ Het script:
 
 Je hoeft geen configuratiebestanden aan te passen.
 
-## Docker Commands
+## Docker Commando's
 
 Starten:
 
@@ -121,7 +121,7 @@ docker compose logs -f elasticsearch
 docker compose logs -f kibana
 ```
 
-## Elasticsearch Controle
+## Elasticsearch-controle
 
 Aantal records:
 
@@ -141,7 +141,7 @@ Alle indices:
 curl http://localhost:9200/_cat/indices?v
 ```
 
-## Belangrijkste Velden
+## Belangrijkste velden
 
 De pipeline bewaart onder andere:
 

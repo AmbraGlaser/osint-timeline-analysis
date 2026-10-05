@@ -16,8 +16,7 @@
 [CmdletBinding()]
 param(
     # Bronmap waarin de scraper en AI-classifier hun JSONL-bestanden plaatsen.
-    [string]$SourceDirectory = "K:\HSLeiden Onderzoeksomgevingen\OSINT\OSINT_scraping-script\osint_scraper\output",
-
+    [string]$SourceDirectory = (Join-Path $PSScriptRoot "..\..\scraper\output"),
     # Doelmap waar Logstash het vaste latest-bestand leest.
     [string]$DestinationDirectory = (Join-Path $PSScriptRoot "..\data"),
 
